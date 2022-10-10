@@ -1,5 +1,0 @@
-pane	0	1	0	:-	1	:/Users/allen	1	hx	:/opt/homebrew/Cellar/helix/22.08.1/libexec/bin/hx .yabairc
-pane	0	2	1	:*	1	:/Users/allen	1	zsh	:
-window	0	1	:hx	0	:-	b61d,70x44,0,0,0	:
-window	0	2	:zsh	1	:*	a61e,70x21,0,0,1	:
-state	0	

@@ -1,5 +1,0 @@
-pane	0	1	1	:*	1	:/Users/allen/.config/yabai	1	zsh	:
-pane	0	2	0	:-	1	:/Users/allen/.config/yabai	1	man	:man yabai
-window	0	1	:zsh	1	:*	b7fd,141x43,0,0,0	:
-window	0	2	:man	0	:-	b65e,69x43,0,0,1	:
-state	0	

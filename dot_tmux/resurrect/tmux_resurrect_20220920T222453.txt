@@ -1,8 +1,0 @@
-pane	0	1	0	:	1	:/Users/allen/work/Web2	1	zsh	:
-pane	0	2	0	:-	1	:/Users/allen/work/Web2	1	zsh	:
-pane	0	2	0	:-	2	:/Users/allen/work/Web2	0	zsh	:
-pane	0	3	1	:*	1	:/Users/allen/.config/yabai	1	kak	:kak yabairc
-window	0	1	:zsh	0	:	b65d,69x43,0,0,0	:
-window	0	2	:zsh	0	:-	246e,69x43,0,0{34x43,0,0,1,34x43,35,0,2}	:
-window	0	3	:kak	1	:*	b661,69x43,0,0,4	:
-state	0	
