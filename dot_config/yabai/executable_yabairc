@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -x
+
+
+# ===== Loading Scripting Additions ============
+
+# See: https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#macos-big-sur---automatically-load-scripting-addition-on-startup
+sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+
+# ===== Tiling setting =========================
+
+yabai -m config layout                      bsp
+
+yabai -m config top_padding                5 
+yabai -m config bottom_padding             5 
+yabai -m config left_padding               5 
+yabai -m config right_padding              5 
+yabai -m config window_gap                 5 
+
+yabai -m config mouse_follows_focus         off
+yabai -m config focus_follows_mouse         off
+
+yabai -m config window_topmost              off
+yabai -m config window_opacity              off
+yabai -m config window_shadow               on
+
+yabai -m config window_border               on 
+yabai -m config window_border_width         2
+yabai -m config active_window_border_color  0xaf007aff
+yabai -m config normal_window_border_color  0x00555555
+yabai -m config insert_feedback_color       0xaad75f5f
+
+yabai -m config active_window_opacity       1.0
+yabai -m config normal_window_opacity       0.90
+yabai -m config split_ratio                 0.50
+
+yabai -m config auto_balance                off
+
+yabai -m config mouse_modifier              fn
+yabai -m config mouse_action1               move
+yabai -m config mouse_action2               resize
+
+
+# ==== App Ignore Rules =========================
+
+yabai -m rule --add app="Stats" sticky=on manage=off
+yabai -m rule --add app="Todoist" sticky=on manage=off
+yabai -m rule --add app="Stickies" sticky=on manage=off
+yabai -m rule --add app="Hammerspoon" sticky=on manage=off
+yabai -m rule --add app="System Preferences" manage=off
+yabai -m rule --add app="Finder" sticky=on manage=off
+yabai -m rule --add app="Hyper" sticky=on manage=off
+
+
+# signals
+yabai -m signal --add event=window_focused action="hs -c \"yabaidirectcall.window_focused(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=application_activated action="hs -c \"yabaidirectcall.application_activated(\`printenv YABAI_PROCESS_ID\`)\""
+yabai -m signal --add event=window_resized action="hs -c \"yabaidirectcall.window_resized(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_moved action="hs -c \"yabaidirectcall.window_moved(\`printenv YABAI_WINDOW_ID\`)\""
+yabai -m signal --add event=window_destroyed action="hs -c \"yabaidirectcall.window_destroyed(\`printenv YABAI_WINDOW_ID\`)\""
+

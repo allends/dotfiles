@@ -1,0 +1,10 @@
+eval "$(starship init zsh)"
+
+alias vim=/Users/allen/.local/bin/lvim
+
+export EDITOR=/opt/homebrew/bin/hx
+export PATH=~/dev/flutter/bin:$PATH
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  
