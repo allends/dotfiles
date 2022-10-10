@@ -1,0 +1,5 @@
+pane	0	1	1	:*	1	:/Users/allen	1	hx	:/opt/homebrew/Cellar/helix/22.08/libexec/bin/hx
+pane	0	2	0	:-	1	:/Users/allen/helix-themes	1	zsh	:
+window	0	1	:hx	1	:*	cebd,156x48,0,0,0	:
+window	0	2	:zsh	0	:-	cebe,156x48,0,0,1	:
+state	0	
