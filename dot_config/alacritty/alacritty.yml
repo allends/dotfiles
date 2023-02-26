@@ -1,0 +1,24 @@
+env:
+  TERM: xterm-256color
+
+import:
+  - ~/.config/alacritty/onedark.yml
+
+window:
+  title:
+    Alacritty
+  dynamic_title: false
+  padding:
+    x: 10
+    y: 10
+
+font:
+  normal: 
+    family: CaskaydiaCove Nerd Font 
+  italic: 
+    family: CaskaydiaCove Nerd Font
+  bold: 
+    family: CaskaydiaCove Nerd Font
+  size: 14
+  offset:
+    x: 1

@@ -45,14 +45,13 @@ yabai -m config mouse_action2               resize
 
 # ==== App Ignore Rules =========================
 
-yabai -m rule --add app="Stats" sticky=on manage=off
-yabai -m rule --add app="Todoist" sticky=on manage=off
-yabai -m rule --add app="Stickies" sticky=on manage=off
-yabai -m rule --add app="Hammerspoon" sticky=on manage=off
-yabai -m rule --add app="System Preferences" manage=off
+yabai -m rule --add app="Stats" manage=off
+yabai -m rule --add app="Todoist" sticky=on  manage=off
+yabai -m rule --add app="Stickies"  manage=off
+yabai -m rule --add app="Hammerspoon"  manage=off
+yabai -m rule --add app="System Preferences" sticky=on manage=off
 yabai -m rule --add app="Finder" sticky=on manage=off
-yabai -m rule --add app="Hyper" sticky=on manage=off
-yabai -m rule --add app="Messages" manage=off
+yabai -m rule --add app="Hyper" manage=off
 
 
 # signals
