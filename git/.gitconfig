@@ -1,0 +1,14 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Allen Davis-Swing
+	email = allen.davisswing@gmail.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCmoSyqRIM/c1UgqENvh9InMx4QHpHcPtP15jAIlWcS
+# Please adapt and uncomment the following lines:
+#	name = Allen Davis-Swing
+#	email = allen.davisswing@eulerity.com
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
