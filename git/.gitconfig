@@ -2,13 +2,22 @@
 [user]
 	name = Allen Davis-Swing
 	email = allen.davisswing@gmail.com
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCmoSyqRIM/c1UgqENvh9InMx4QHpHcPtP15jAIlWcS
-# Please adapt and uncomment the following lines:
-#	name = Allen Davis-Swing
-#	email = allen.davisswing@eulerity.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDw4paomkPUuZfuJsZdWERz3sFBNNm2b7TqU1SUDAks/
 [gpg]
 	format = ssh
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 [commit]
 	gpgsign = true
+[push]
+	autoSetupRemote = true
+[core]
+	editor = hx
+
+[alias]
+	st = status
+	co = checkout
+	ci = commit
+	br = branch
+	unstage = reset HEAD --
+	st = status --short --branch
