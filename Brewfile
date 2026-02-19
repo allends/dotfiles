@@ -14,6 +14,8 @@ brew "eza"            # Better ls
 brew "bat"            # Better cat
 brew "tre-command"    # Better tree (aliased as `tree`)
 brew "fzf"            # Fuzzy finder
+brew "fd"             # Better find
+brew "ripgrep"        # Better grep
 
 # Dev tooling
 brew "gh"             # GitHub CLI
@@ -29,10 +31,8 @@ brew "helix"          # Modal editor
 brew "notesmd-cli"    # Obsidian vault CLI
 brew "zk"             # Zettelkasten LSP (used with helix)
 
-# macOS only
-on_macos do
-  cask "zed"
-  cask "obsidian"
-  cask "1password"
-  cask "orbstack"
-end
+# macOS only (ignored on Linux)
+cask "zed"
+cask "obsidian"
+cask "1password"
+cask "orbstack"

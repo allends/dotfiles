@@ -5,19 +5,23 @@
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDw4paomkPUuZfuJsZdWERz3sFBNNm2b7TqU1SUDAks/
 [gpg]
 	format = ssh
-[gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 [commit]
-	gpgsign = true
+	gpgsign = false
 [push]
 	autoSetupRemote = true
 [core]
 	editor = hx
 
 [alias]
-	st = status
+	st = status --short --branch
 	co = checkout
 	ci = commit
 	br = branch
 	unstage = reset HEAD --
-	st = status --short --branch
+
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
