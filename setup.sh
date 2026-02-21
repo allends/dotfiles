@@ -34,7 +34,7 @@ echo "==> Brew found at $(which brew)"
 
 # ---------- 3. Install packages from Brewfile ----------
 echo "==> Installing Brewfile packages..."
-brew bundle install --file="$DOTFILES/Brewfile" --no-lock || true
+brew bundle install --file="$DOTFILES/Brewfile" || true
 
 # ---------- 4. Stow dotfiles ----------
 echo "==> Linking dotfiles with stow..."
