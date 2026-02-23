@@ -23,6 +23,7 @@ brew "git"
 brew "mise"           # Runtime version manager (node, python, etc.)
 brew "stow"           # Dotfile symlink manager
 brew "lazygit"        # Terminal git UI
+brew "zellij"         # Terminal multiplexer
 
 # Editors
 brew "helix"          # Modal editor

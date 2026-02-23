@@ -25,6 +25,7 @@ alias gsm="git checkout main && git pull"
 alias lg="lazygit"
 alias cat="bat"
 alias c="claude --dangerously-skip-permissions"
+alias cde="zellij --layout claude"
 
 # Init zoxide (interactive shells only)
 if status is-interactive; and command -q zoxide
