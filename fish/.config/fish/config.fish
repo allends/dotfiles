@@ -2,22 +2,19 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-# Homebrew — detect macOS or Linux location
-if test -x /opt/homebrew/bin/brew
-    eval (/opt/homebrew/bin/brew shellenv)
-else if test -x /home/linuxbrew/.linuxbrew/bin/brew
-    eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-end
+# Homebrew — cached shellenv (avoid running brew shellenv on every shell)
+set -gx HOMEBREW_PREFIX /opt/homebrew
+set -gx HOMEBREW_CELLAR /opt/homebrew/Cellar
+set -gx HOMEBREW_REPOSITORY /opt/homebrew
+fish_add_path -gP /opt/homebrew/bin /opt/homebrew/sbin
 
 # custom scripts to path
 fish_add_path -p $HOME/.local/bin
 fish_add_path -p $HOME/.npm-global/bin
 fish_add_path -p $HOME/.bun/bin
 
-# mise en place (fish) — only if installed
-if command -q mise
-    mise activate fish | source
-end
+# mise en place — shims mode (faster than hook-env activation)
+fish_add_path -p ~/.local/share/mise/shims
 
 # QOL aliases
 alias ls="eza -la"
@@ -56,6 +53,7 @@ if test (uname) = Darwin
 
     alias aws-qa="aws sso login --profile=QA"
     alias aws-prod="aws sso login --profile=PRODUCTION"
+    alias aws-infra="aws sso login --profile=INFRA"
     alias migrate-qa="AWS_PROFILE=PRODUCTION DOPPLER_ENV=prd bun run db:migrate"
     alias migrate-prod="AWS_PROFILE=PRODUCTION DOPPLER_ENV=prd bun run db:migrate"
 

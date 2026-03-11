@@ -162,7 +162,8 @@
       "Bash(pnpm db:generate:*)",
       "WebFetch(domain:ai.pydantic.dev)",
       "Bash(gh pr diff:*)",
-      "Bash(timeout 60 pnpm cli chat-eval run:*)"
+      "Bash(timeout 60 pnpm cli chat-eval run:*)",
+      "Skill(edit-slides)"
     ],
     "deny": [
       "Bash(rm -rf:*)"
@@ -172,9 +173,7 @@
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
   },
-  "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "medium"
+  "skipDangerousModePermissionPrompt": true
 }
