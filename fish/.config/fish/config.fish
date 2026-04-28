@@ -24,6 +24,11 @@ alias cat="bat"
 alias c="claude --dangerously-skip-permissions"
 alias cde="zellij --layout claude"
 
+# fnm (fast node manager)
+if command -q fnm
+    fnm env --use-on-cd --shell fish | source
+end
+
 # Init zoxide (interactive shells only)
 if status is-interactive; and command -q zoxide
     zoxide init --cmd cd fish | source
