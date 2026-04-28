@@ -39,7 +39,7 @@ brew bundle install --file="$DOTFILES/Brewfile" || true
 # ---------- 4. Stow dotfiles ----------
 echo "==> Linking dotfiles with stow..."
 cd "$DOTFILES"
-for dir in fish git helix ssh claude zed; do
+for dir in fish git helix ssh claude zed pi; do
     if [ -d "$dir" ]; then
         echo "    stow $dir"
         stow -v --restow --target="$HOME" "$dir" 2>&1 || true

@@ -12,6 +12,7 @@ Each top-level directory is a stow package that maps to `$HOME`:
 - `ssh/` — SSH config (`~/.ssh/config`)
 - `claude/` — Claude Code settings (`~/.claude/settings.json`)
 - `zed/` — Zed editor settings (`~/.config/zed/`)
+- `pi/` — Pi agent config (`~/.pi/agent/{settings,models}.json`, `~/.pi/agent/extensions/`). Auth tokens, sessions, and backups stay local and are not tracked.
 - `zsh/` — Zsh config (legacy, kept for compatibility)
 
 ## Quick setup
