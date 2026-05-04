@@ -104,16 +104,14 @@ export interface TodoItem {
 	step: number;
 	text: string;
 	completed: boolean;
+	blocked?: boolean;
+	blockReason?: string;
 }
 
 export function cleanStepText(text: string): string {
 	let cleaned = text
 		.replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1") // Remove bold/italic
 		.replace(/`([^`]+)`/g, "$1") // Remove code
-		.replace(
-			/^(Use|Run|Execute|Create|Write|Read|Check|Verify|Update|Modify|Add|Remove|Delete|Install)\s+(the\s+)?/i,
-			"",
-		)
 		.replace(/\s+/g, " ")
 		.trim();
 
@@ -124,6 +122,43 @@ export function cleanStepText(text: string): string {
 		cleaned = `${cleaned.slice(0, 47)}...`;
 	}
 	return cleaned;
+}
+
+function isLowQualityStepText(rawText: string, cleanedText: string): boolean {
+	const raw = rawText.trim();
+	const cleaned = cleanedText.trim();
+	const lower = cleaned.toLowerCase();
+	const words = cleaned.split(/\s+/).filter(Boolean);
+
+	if (cleaned.length < 8 || words.length < 2) return true;
+	if (/^#{1,6}\s+/.test(raw)) return true;
+	if (/^[`/\-–—,.;:)\]]/.test(raw)) return true;
+	if (/^(and|or|then|also|but|because)\b/i.test(cleaned)) return true;
+	if (/^(tbd|todo|n\/a|none|unknown)$/i.test(cleaned)) return true;
+	if (/^option\s+[a-z0-9]\b/i.test(cleaned)) return true;
+	if (/^(alternative|alternatives|either|or)\b/i.test(cleaned)) return true;
+	if (/^(goal|tasks?|tasks ordered|ordered tasks|relevant files|notes?|implementation|validation|testing|tests?|verification|summary|approach|phase\s+\d+)[:.]?$/i.test(cleaned)) return true;
+	if (/^(validation|testing|verification)\s*[:.-]?$/i.test(cleaned)) return true;
+	if (cleaned.endsWith(":") && words.length <= 5) return true;
+	if (!/[a-z0-9]/i.test(cleaned)) return true;
+	if (/^(if|when|unless)\b/i.test(cleaned) && words.length < 5) return true;
+	if (/^(check|verify|test|validate)$/i.test(lower)) return true;
+
+	return false;
+}
+
+function addTodoItem(items: TodoItem[], rawText: string): void {
+	const text = rawText
+		.trim()
+		.replace(/\*{1,2}$/, "")
+		.trim();
+
+	if (!text || text.startsWith("`") || text.startsWith("/") || text.startsWith("-")) return;
+
+	const cleaned = cleanStepText(text);
+	if (!isLowQualityStepText(text, cleaned)) {
+		items.push({ step: items.length + 1, text: cleaned, completed: false });
+	}
 }
 
 export function extractTodoItems(message: string): TodoItem[] {
@@ -144,18 +179,7 @@ export function extractTodoItems(message: string): TodoItem[] {
 
 		const match = numberedPattern.exec(line);
 		if (!match) continue;
-
-		const text = match[2]
-			.trim()
-			.replace(/\*{1,2}$/, "")
-			.trim();
-
-		if (text.length > 5 && !text.startsWith("`") && !text.startsWith("/") && !text.startsWith("-")) {
-			const cleaned = cleanStepText(text);
-			if (cleaned.length > 3) {
-				items.push({ step: items.length + 1, text: cleaned, completed: false });
-			}
-		}
+		addTodoItem(items, match[2]);
 	}
 
 	// Backward compatibility: legacy "Plan:" numbered lists.
@@ -167,16 +191,7 @@ export function extractTodoItems(message: string): TodoItem[] {
 		const legacyPattern = /^\s*(\d+)[.)]\s+\*{0,2}([^*\n]+)/gm;
 
 		for (const match of planSection.matchAll(legacyPattern)) {
-			const text = match[2]
-				.trim()
-				.replace(/\*{1,2}$/, "")
-				.trim();
-			if (text.length > 5 && !text.startsWith("`") && !text.startsWith("/") && !text.startsWith("-")) {
-				const cleaned = cleanStepText(text);
-				if (cleaned.length > 3) {
-					items.push({ step: items.length + 1, text: cleaned, completed: false });
-				}
-			}
+			addTodoItem(items, match[2]);
 		}
 	}
 
@@ -193,10 +208,15 @@ export function extractDoneSteps(message: string): number[] {
 }
 
 export function markCompletedSteps(text: string, items: TodoItem[]): number {
-	const doneSteps = extractDoneSteps(text);
-	for (const step of doneSteps) {
+	let changed = 0;
+	for (const step of extractDoneSteps(text)) {
 		const item = items.find((t) => t.step === step);
-		if (item) item.completed = true;
+		if (item && !item.completed) {
+			item.completed = true;
+			item.blocked = false;
+			item.blockReason = undefined;
+			changed++;
+		}
 	}
-	return doneSteps.length;
+	return changed;
 }

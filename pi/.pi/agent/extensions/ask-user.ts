@@ -72,17 +72,21 @@ function isPrintableInput(data: string): boolean {
 	return code >= 32 && code !== 127;
 }
 
+type AskOneResult = { action: "answer"; selected_option: string; notes?: string } | { action: "previous" } | null;
+
 async function askOneQuestion(
 	ctx: ExtensionContext,
 	question: AskUserQuestion,
 	index: number,
 	total: number,
-): Promise<{ selected_option: string; notes?: string } | null> {
+	previousAnswer?: Pick<AskUserAnswer, "selected_option" | "notes">,
+): Promise<AskOneResult> {
 	const options = [...question.options, OTHER_LABEL];
+	const initialOptionIndex = previousAnswer ? options.indexOf(previousAnswer.selected_option) : -1;
 
-	return ctx.ui.custom<{ selected_option: string; notes?: string } | null>((tui, theme, _kb, done) => {
-		let optionIndex = 0;
-		let notesText = "";
+	return ctx.ui.custom<AskOneResult>((tui, theme, _kb, done) => {
+		let optionIndex = initialOptionIndex >= 0 ? initialOptionIndex : 0;
+		let notesText = previousAnswer?.notes ?? "";
 		let cachedLines: string[] | undefined;
 
 		function refresh() {
@@ -103,10 +107,15 @@ async function askOneQuestion(
 				ctx.ui.notify("Notes are required when selecting Other.", "warning");
 				return;
 			}
-			done({ selected_option: "Other", notes: trimmed });
+			done({ action: "answer", selected_option: "Other", notes: trimmed });
 		}
 
 		function handleInput(data: string) {
+			if (matchesKey(data, Key.left) && index > 0) {
+				done({ action: "previous" });
+				return;
+			}
+
 			if (matchesKey(data, Key.up)) {
 				optionIndex = Math.max(0, optionIndex - 1);
 				refresh();
@@ -129,7 +138,7 @@ async function askOneQuestion(
 				if (isOtherSelected) {
 					submitNotesIfValid();
 				} else {
-					done({ selected_option: selected });
+					done({ action: "answer", selected_option: selected });
 				}
 				return;
 			}
@@ -170,7 +179,8 @@ async function askOneQuestion(
 			}
 
 			lines.push("");
-			add(theme.fg("dim", " ↑↓ navigate • Enter select • Esc cancel"));
+			const previousHint = index > 0 ? " • ← previous question" : "";
+			add(theme.fg("dim", ` ↑↓ navigate • Enter select${previousHint} • Esc cancel`));
 			add(theme.fg("dim", " When 'Other' is highlighted, just type notes inline"));
 			add(theme.fg("accent", "─".repeat(width)));
 
@@ -225,9 +235,10 @@ export default function askUserExtension(pi: ExtensionAPI): void {
 
 			const answers: AskUserAnswer[] = [];
 
-			for (let i = 0; i < params.questions.length; i++) {
+			let i = 0;
+			while (i < params.questions.length) {
 				const q = params.questions[i];
-				const result = await askOneQuestion(ctx, q, i, params.questions.length);
+				const result = await askOneQuestion(ctx, q, i, params.questions.length, answers[i]);
 
 				if (!result) {
 					return {
@@ -236,12 +247,18 @@ export default function askUserExtension(pi: ExtensionAPI): void {
 					};
 				}
 
-				answers.push({
+				if (result.action === "previous") {
+					i = Math.max(0, i - 1);
+					continue;
+				}
+
+				answers[i] = {
 					id: q.id,
 					prompt: q.prompt,
 					selected_option: result.selected_option,
 					notes: result.notes,
-				});
+				};
+				i++;
 			}
 
 			return {

@@ -28,4 +28,4 @@ select = "underline"
 left = ["mode", "spinner", "version-control", "file-name"]
 
 [editor.soft-wrap]
-enable = false
+enable = true

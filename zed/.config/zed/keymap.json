@@ -40,7 +40,8 @@
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      "space f": "file_finder::Toggle"
+      "space f": "file_finder::Toggle",
+      "g r": "editor::FindAllReferences"
     }
   }
 ]

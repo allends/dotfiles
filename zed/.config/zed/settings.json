@@ -7,6 +7,7 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "bottom_dock_layout": "contained",
   "project_panel": {
     "dock": "left"
   },
@@ -18,6 +19,15 @@
   },
   "git_panel": {
     "dock": "left"
+  },
+  "vim_mode": false,
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    }
   },
   "tasks": {
     "prefer_lsp": true
@@ -32,10 +42,22 @@
   "helix_mode": true,
   "agent": {
     "dock": "right",
+    "tool_permissions": {
+      "tools": {
+        "fetch": {
+          "default": "allow"
+        },
+        "terminal": {
+          "default": "allow"
+        }
+      }
+    },
     "default_profile": "write",
     "default_model": {
+      "effort": "medium",
+      "enable_thinking": true,
       "provider": "anthropic",
-      "model": "claude-opus-4-6-thinking-latest",
+      "model": "claude-opus-4-6-latest",
     },
   },
   "icon_theme": {
