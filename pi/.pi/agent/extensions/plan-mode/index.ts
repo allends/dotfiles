@@ -51,6 +51,13 @@ function getTextContent(message: AssistantMessage): string {
 		.join("\n");
 }
 
+function sortTodosForDisplay(items: TodoItem[]): TodoItem[] {
+	return items
+		.map((item, index) => ({ item, index }))
+		.sort((a, b) => Number(a.item.completed) - Number(b.item.completed) || a.index - b.index)
+		.map(({ item }) => item);
+}
+
 export default function planModeExtension(pi: ExtensionAPI): void {
 	let planModeEnabled = false;
 	let executionMode = false;
@@ -81,7 +88,7 @@ export default function planModeExtension(pi: ExtensionAPI): void {
 
 		// Widget showing todo list
 		if (executionMode && todoItems.length > 0) {
-			const lines = todoItems.map((item) => {
+			const lines = sortTodosForDisplay(todoItems).map((item) => {
 				if (item.completed) {
 					return (
 						ctx.ui.theme.fg("success", "☑ ") + ctx.ui.theme.fg("muted", ctx.ui.theme.strikethrough(item.text))
