@@ -7,6 +7,11 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "edit_predictions": {
+    "open_ai_compatible_api": {
+      "model": ""
+    }
+  },
   "bottom_dock_layout": "contained",
   "project_panel": {
     "dock": "left",
@@ -101,7 +106,7 @@
     "light": "Zed (Default)",
     "dark": "VSCode Icons for Zed (Dark)",
   },
-  "base_keymap": "VSCode",
+  "base_keymap": "Cursor",
   "ui_font_size": 16,
   "buffer_font_size": 13.0,
   "theme": {

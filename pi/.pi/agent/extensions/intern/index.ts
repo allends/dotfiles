@@ -6,6 +6,8 @@ const internSessionTypeSchema = Type.Union([
 	Type.Literal("pr_slack"),
 ]);
 
+const DEFAULT_INTERN_BRANCH = "main";
+
 const internNewSchema = Type.Object({
 	session_type: Type.Union([
 		Type.Literal("research_slack"),
@@ -25,7 +27,8 @@ const internNewSchema = Type.Object({
 	),
 	branch: Type.Optional(
 		Type.String({
-			description: "Optional branch to check out before the intern starts working.",
+			default: DEFAULT_INTERN_BRANCH,
+			description: "Optional branch to check out before the intern starts working. Defaults to main unless the user explicitly asks for another branch.",
 		}),
 	),
 	provider: Type.Optional(
@@ -161,7 +164,8 @@ function buildAgencyPrompt(
 		"",
 		"Execution expectations",
 		"- Treat this as a one-shot task. Make reasonable assumptions and drive to a useful outcome without waiting for clarification unless blocked by a hard ambiguity.",
-		"- Start by reading AGENTS.md at the repository root, then read any directly relevant docs under .claude/skills/ before changing code.",
+		"- Start with a codebase exploration pass: read AGENTS.md at the repository root, inspect the current implementation, and read any directly relevant docs under .claude/skills/ before changing code.",
+		"- Treat implementation details in the request as hypotheses to verify against the current code, not instructions to follow blindly.",
 		"- Follow existing patterns in the touched area instead of inventing new structure.",
 		"- Keep the scope tight and avoid unrelated refactors unless they are necessary to complete the task cleanly.",
 		"- Clean up as you work. Keep comments sparse and useful.",
@@ -202,7 +206,7 @@ function parseJson<T>(value: string): T | undefined {
 async function createInternSession(pi: ExtensionAPI, input: InternNewInput, signal?: AbortSignal) {
 	const git = await getGitContext(pi);
 	const repo = trimMaybe(input.repo) ?? git.repo ?? "agency-inc/agency";
-	const branch = trimMaybe(input.branch);
+	const branch = trimMaybe(input.branch) ?? DEFAULT_INTERN_BRANCH;
 	const provider = trimMaybe(input.provider);
 	const task = input.task.trim();
 	const sessionType = input.session_type;
@@ -306,6 +310,8 @@ export default function agencyInternExtension(pi: ExtensionAPI) {
 		promptSnippet: "Create a remote intern session in the Agency repo with a self-contained task prompt and the right session type.",
 		promptGuidelines: [
 			"Use this tool when the user wants to delegate a scoped task, investigation, or implementation to an intern session.",
+			"Unless the user explicitly asks for another base branch, create the intern session from `main` (the `branch` parameter defaults to `main`).",
+			"Before creating the intern task, do a lightweight codebase exploration by default so the prompt includes current files, patterns, constraints, and a concrete definition of done.",
 			"Choose `session_type: research_slack` for investigation or codebase research that should end with a Slack update, without opening a PR.",
 			"Choose `session_type: pr_slack` for implementation work that should end with a fresh branch, a PR, and a Slack update containing the PR link.",
 			"Do not pass a thin raw request if it lacks context. Rewrite it into a self-contained task with goal, context, constraints, and definition of done.",

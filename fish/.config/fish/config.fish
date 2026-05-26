@@ -173,3 +173,18 @@ function agency-db-prod
 
     __agency_db_prod_cleanup
 end
+
+# Start the reverse SSH tunnel from this MacBook to Fedora home.
+# Equivalent to:
+# ssh -N -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -R 2223:localhost:22 -p 2222 allen@71.105.200.114
+alias home-tunnel="ssh -N home-reverse-tunnel"
+alias home-tunnel-bg="ssh -fN home-reverse-tunnel"
+
+# Load machine-local secrets that should not be committed.
+if test -f ~/.config/fish/private.fish
+    source ~/.config/fish/private.fish
+end
+
+# Hermes agent bridge
+set -gx HERMES_BRIDGE_AGENT mbp-work
+set -gx HERMES_BRIDGE_HOST home-vps-bastion

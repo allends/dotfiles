@@ -26,10 +26,14 @@ The default wrapper is tailored to the chosen session type.
 
 ## Behavior
 
+`intern_new` creates sessions from `main` by default. Pass `branch` only when the user explicitly asks for another base branch.
+
 `intern_new` wraps the requested task with Agency-specific one-shot guidance by default:
 
+- starts with a codebase exploration pass before changes
 - reminds the intern to read `AGENTS.md`
 - points it at relevant `.claude/skills/` docs
+- asks it to treat implementation details in the request as hypotheses to verify against the current code
 - asks it to keep scope tight and follow local patterns
 - chooses either a research+Slack or branch/PR+Slack delivery mode
 - asks it to run meaningful verification and report exact file paths changed
@@ -49,5 +53,7 @@ Inside pi:
 
 - Sessions are created with `intern new --json`
 - Repo defaults to the current git remote, falling back to `agency-inc/agency`
+- Branch defaults to `main`, unless a different branch is explicitly requested
+- The pi assistant should do lightweight local exploration before calling `intern_new` so prompts are self-contained without repeated user instructions
 - After creation, the extension reports the session id and an `intern attach <id>` command
 - Reload pi with `/reload` after editing the extension

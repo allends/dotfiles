@@ -13,6 +13,12 @@
     }
   },
   {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-g": "go_to_line::Toggle"
+    }
+  },
+  {
     "context": "Editor && vim_mode == insert",
     "bindings": {
       // "j k": "vim::NormalBefore"
