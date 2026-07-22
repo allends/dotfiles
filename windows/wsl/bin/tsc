@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec "$HOME/.bun/bin/bunx" --bun tsc "$@"
+exec "$HOME/.bun/bin/bun" "$HOME/.bun/install/global/node_modules/typescript/bin/tsc" "$@"
