@@ -15,6 +15,8 @@ if test (uname) = Darwin
     set -gx HOMEBREW_PREFIX /opt/homebrew
 else
     set -gx HOMEBREW_PREFIX /home/linuxbrew/.linuxbrew
+    set -gx SSL_CERT_FILE /etc/ssl/certs/ca-certificates.crt
+    set -gx CURL_CA_BUNDLE $SSL_CERT_FILE
 end
 set -gx HOMEBREW_CELLAR $HOMEBREW_PREFIX/Cellar
 set -gx HOMEBREW_REPOSITORY $HOMEBREW_PREFIX/Homebrew
