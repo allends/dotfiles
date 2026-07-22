@@ -23,9 +23,8 @@ set -gx HOMEBREW_REPOSITORY $HOMEBREW_PREFIX/Homebrew
 __dotfiles_add_path $HOMEBREW_PREFIX/sbin $HOMEBREW_PREFIX/bin
 
 # custom scripts to path
-__dotfiles_add_path $HOME/.local/bin
-__dotfiles_add_path $HOME/.npm-global/bin
 __dotfiles_add_path $HOME/.bun/bin
+__dotfiles_add_path $HOME/.local/bin
 
 # mise en place — shims mode (faster than hook-env activation)
 __dotfiles_add_path $HOME/.local/share/mise/shims

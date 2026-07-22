@@ -66,6 +66,9 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 bun upgrade
 bun add --global typescript typescript-language-server
+mkdir -p "$HOME/.local/bin"
+install -m 0755 "$dotfiles/windows/wsl/bin/tsc" "$HOME/.local/bin/tsc"
+install -m 0755 "$dotfiles/windows/wsl/bin/typescript-language-server" "$HOME/.local/bin/typescript-language-server"
 
 cd "$dotfiles"
 for package in fish helix; do
