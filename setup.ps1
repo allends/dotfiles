@@ -107,6 +107,19 @@ $windowsRoot = Join-Path $dotfilesRoot 'windows'
 Copy-Dotfile `
     -Source (Join-Path $windowsRoot 'powershell\Microsoft.PowerShell_profile.ps1') `
     -Destination $PROFILE.CurrentUserAllHosts
+
+# PowerShell loads the all-hosts profile above before this older, host-specific
+# profile. Preserve any legacy file once, then remove it so it cannot override
+# the dotfiles profile or initialize retired prompt tooling.
+$legacyPowerShellProfile = $PROFILE.CurrentUserCurrentHost
+if ((Test-Path -LiteralPath $legacyPowerShellProfile) -and
+    $legacyPowerShellProfile -ne $PROFILE.CurrentUserAllHosts) {
+    $legacyBackup = "$legacyPowerShellProfile.legacy.backup"
+    if (-not (Test-Path -LiteralPath $legacyBackup)) {
+        Copy-Item -LiteralPath $legacyPowerShellProfile -Destination $legacyBackup -Force
+    }
+    Remove-Item -LiteralPath $legacyPowerShellProfile -Force
+}
 Copy-Dotfile `
     -Source (Join-Path $windowsRoot 'helix\config.toml') `
     -Destination (Join-Path $env:APPDATA 'helix\config.toml')

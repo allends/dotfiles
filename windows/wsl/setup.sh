@@ -62,6 +62,12 @@ for package in fish helix; do
     stow --restow --target="$HOME" "$package"
 done
 
+# Older WSL installs used this one-line zsh hook. Fish is the default shell,
+# but remove the hook too so falling back to zsh never starts tmux implicitly.
+if [[ -f "$HOME/.zshrc" ]]; then
+    sed -i '/^if \[ "\$TMUX" = "" \]; then tmux; fi$/d' "$HOME/.zshrc"
+fi
+
 git config --global user.name 'Allen Davis-Swing'
 git config --global user.email 'allen.davisswing@gmail.com'
 git config --global core.editor hx
