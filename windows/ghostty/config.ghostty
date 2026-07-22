@@ -1,0 +1,9 @@
+font-size = 12
+theme = Dracula
+command = wsl.exe --distribution Ubuntu --cd ~ --exec /home/linuxbrew/.linuxbrew/bin/fish --login
+
+# macOS-style cursor movement on a Windows keyboard.
+keybind = super+arrow_left=text:\x01
+keybind = super+arrow_right=text:\x05
+keybind = ctrl+arrow_left=esc:b
+keybind = ctrl+arrow_right=esc:f
