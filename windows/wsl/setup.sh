@@ -88,9 +88,11 @@ done
 if [[ -f "$HOME/.zshrc" ]]; then
     sed -i '/^if \[ "\$TMUX" = "" \]; then tmux; fi$/d' "$HOME/.zshrc"
 fi
-if [[ -f "$HOME/.zshenv" ]]; then
-    sed -i '/^\. "\$HOME\/\.cargo\/env"$/d' "$HOME/.zshenv"
-fi
+for legacy_profile in "$HOME/.zshenv" "$HOME/.profile"; do
+    if [[ -f "$legacy_profile" ]]; then
+        sed -i '/^\. "\$HOME\/\.cargo\/env"$/d' "$legacy_profile"
+    fi
+done
 
 git config --global user.name 'Allen Davis-Swing'
 git config --global user.email 'allen.davisswing@gmail.com'
