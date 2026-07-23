@@ -79,7 +79,7 @@
     "button": false,
     "inline_assistant_model": {
       "provider": "anthropic",
-      "model": "claude-opus-4-7-latest",
+      "model": "claude-sonnet-5",
       "enable_thinking": false
     },
     "dock": "right",
@@ -95,10 +95,10 @@
     },
     "default_profile": "write",
     "default_model": {
-      "effort": "medium",
+      "effort": "high",
       "enable_thinking": true,
       "provider": "anthropic",
-      "model": "claude-opus-4-7-latest",
+      "model": "claude-sonnet-5",
     },
   },
   "icon_theme": {
@@ -134,21 +134,21 @@
   "languages": {
     "TypeScript": {
       "language_servers": [
-        "tsgo",
+        "typescript-ls",
         "!typescript-language-server",
         "!vtsls"
       ]
     },
     "TSX": {
       "language_servers": [
-        "tsgo",
+        "typescript-ls",
         "!typescript-language-server",
         "!vtsls"
       ]
     },
     "JavaScript": {
       "language_servers": [
-        "tsgo",
+        "typescript-ls",
         "!typescript-language-server",
         "!vtsls"
       ]
