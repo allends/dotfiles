@@ -2,22 +2,36 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
+function __dotfiles_add_path
+    for path in $argv
+        if test -d $path; and not contains -- $path $PATH
+            set -gx PATH $path $PATH
+        end
+    end
+end
+
 # Homebrew — cached shellenv (avoid running brew shellenv on every shell)
-set -gx HOMEBREW_PREFIX /opt/homebrew
-set -gx HOMEBREW_CELLAR /opt/homebrew/Cellar
-set -gx HOMEBREW_REPOSITORY /opt/homebrew
-fish_add_path -gP /opt/homebrew/bin /opt/homebrew/sbin
+if test (uname) = Darwin
+    set -gx HOMEBREW_PREFIX /opt/homebrew
+else
+    set -gx HOMEBREW_PREFIX /home/linuxbrew/.linuxbrew
+    set -gx SSL_CERT_FILE /etc/ssl/certs/ca-certificates.crt
+    set -gx CURL_CA_BUNDLE $SSL_CERT_FILE
+end
+set -gx HOMEBREW_CELLAR $HOMEBREW_PREFIX/Cellar
+set -gx HOMEBREW_REPOSITORY $HOMEBREW_PREFIX/Homebrew
+__dotfiles_add_path $HOMEBREW_PREFIX/sbin $HOMEBREW_PREFIX/bin
 
 # custom scripts to path
-fish_add_path -p $HOME/.local/bin
-fish_add_path -p $HOME/.npm-global/bin
-fish_add_path -p $HOME/.bun/bin
+__dotfiles_add_path $HOME/.bun/bin
+__dotfiles_add_path $HOME/.local/bin
 
 # mise en place — shims mode (faster than hook-env activation)
-fish_add_path -p ~/.local/share/mise/shims
+__dotfiles_add_path $HOME/.local/share/mise/shims
 
 # QOL aliases
 alias ls="eza -la"
+alias exa="eza"
 alias gsm="git checkout main && git pull"
 alias lg="lazygit"
 alias cat="bat"
@@ -65,7 +79,7 @@ set -g fish_greeting ""
 
 # macOS-only
 if test (uname) = Darwin
-    fish_add_path -p /opt/homebrew/opt/postgresql@17/bin
+    __dotfiles_add_path /opt/homebrew/opt/postgresql@17/bin
 
     alias aws-qa="aws sso login --profile=QA"
     alias aws-prod="aws sso login --profile=PRODUCTION"
@@ -86,6 +100,9 @@ if test (uname) = Darwin
         set -U fish_complete_path $HOME/completions $fish_complete_path
     end
 end
+
+# Multiplexers are available on demand; never auto-launch tmux or zellij.
+functions -e __dotfiles_add_path
 
 # Connect to the agency prod DB via lazysql.
 # Spins up the kubectl port-forward proxy (scripts/db-gui-proxy.sh) in the

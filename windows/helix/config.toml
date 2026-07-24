@@ -1,0 +1,29 @@
+theme = "dark_plus"
+
+[editor]
+mouse = true
+true-color = true
+bufferline = "always"
+
+[editor.whitespace]
+render = "all"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+newline = "⏎"
+tabpad = "·"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+
+[editor.soft-wrap]
+enable = true
+
