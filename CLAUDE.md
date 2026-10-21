@@ -6,14 +6,15 @@ Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 Each top-level directory is a stow package that maps to `$HOME`:
 
-- `fish/` — Fish shell config (`~/.config/fish/config.fish`)
+- `zsh/` — Zsh login and interactive shell config (`~/.zprofile`, `~/.zshenv`, `~/.zshrc`)
 - `git/` — Git config and global ignore (`~/.gitconfig`, `~/.config/git/ignore`)
 - `helix/` — Helix editor config (`~/.config/helix/`)
 - `ssh/` — SSH config (`~/.ssh/config`)
 - `claude/` — Claude Code settings (`~/.claude/settings.json`)
 - `zed/` — Zed editor settings (`~/.config/zed/`)
 - `pi/` — Pi agent config (`~/.pi/agent/{settings,models}.json`, `~/.pi/agent/extensions/`). Auth tokens, sessions, and backups stay local and are not tracked.
-- `zsh/` — Zsh config (legacy, kept for compatibility)
+- `fish/` — Archived Fish config; not installed or linked by setup
+- `zellij/` — Zellij layouts (`~/.config/zellij/layouts/`)
 
 ## Quick setup
 
@@ -31,7 +32,7 @@ cd ~/dotfiles
 
 ### macOS
 
-`setup.sh` works out of the box. Homebrew installs to `/opt/homebrew`, `chsh` sets fish as the login shell, and Brewfile casks (zed, obsidian, 1password, orbstack) install normally.
+`setup.sh` works out of the box. Homebrew installs to `/opt/homebrew`, `setup.sh` keeps or selects Zsh as the login shell, and Brewfile casks (zed, 1password, orbstack, keepingyouawake) install normally. Obsidian and its notesmd-cli tooling are excluded. Install Apple’s Command Line Tools first (`xcode-select --install`) if Git is not yet available.
 
 ### Linux (Fedora / RHEL-based)
 
@@ -50,8 +51,8 @@ Homebrew installs to `/home/linuxbrew/.linuxbrew`. A few things to handle before
   [ -d ~/.config/helix ] && mv ~/.config/helix ~/dotfiles-backup/helix
   [ -f ~/.claude/settings.json ] && mv ~/.claude/settings.json ~/dotfiles-backup/claude-settings.json
   ```
-- **Brewfile casks**: The macOS-only casks (zed, obsidian, 1password, orbstack) are silently skipped on Linux.
-- **Fish shell**: `chsh` requires sudo. If sudo is unavailable or prompts for a password non-interactively, the script falls back to adding an `exec fish` block to `~/.bashrc` so fish launches automatically for interactive sessions.
+- **Brewfile casks**: The macOS-only casks (zed, 1password, orbstack, keepingyouawake) are silently skipped on Linux.
+- **Zsh shell**: Setup keeps an existing Zsh login shell. If another shell is configured, `chsh` selects Zsh and may prompt for your password. On Linux, adding a new Zsh path to `/etc/shells` requires sudo. Fish is not installed, linked, or launched.
 - **Outdated Homebrew**: If Homebrew was previously installed but is old, run `brew update` before `setup.sh` to avoid compatibility issues with `brew bundle`.
 - **SSH keys**: The `ssh/` stow package only links `~/.ssh/config`. Existing keys in `~/.ssh/` are not touched and must be copied or generated manually.
 
@@ -60,8 +61,8 @@ Homebrew installs to `/home/linuxbrew/.linuxbrew`. A few things to handle before
 When setting up a new machine with this repo:
 
 1. On Linux, install build dependencies and back up any conflicting dotfiles first (see platform notes above)
-2. Run `./setup.sh` — it handles Homebrew, packages, stow linking, and fish shell setup
-3. If sudo is unavailable, install Homebrew to `~/.linuxbrew` and skip chsh (the script falls back to .bashrc auto-launch)
+2. Run `./setup.sh` — it handles Homebrew, packages, stow linking, and Zsh shell setup
+3. If sudo is unavailable, install Homebrew to `~/.linuxbrew` and set Zsh as your login shell manually when administrator access becomes available
 4. After setup, authenticate GitHub: `gh auth login`
 5. SSH keys must be manually copied or generated — they are not in this repo
 
@@ -76,6 +77,6 @@ stow newpkg
 
 ## Key tools
 
-All installed via `Brewfile`: fish, starship, zoxide, eza, bat, fzf, fd, ripgrep, helix, mise, lazygit, gh, notesmd-cli, zk, tre-command.
+All installed via `Brewfile`: zsh, starship, zoxide, eza, bat, fzf, fd, ripgrep, helix, mise, lazygit, gh, zk, tre-command.
 
-The Brewfile uses the `yakitrak/yakitrak` tap for `notesmd-cli`.
+The default setup excludes Fish, Obsidian, and notesmd-cli; no Obsidian tap is needed.

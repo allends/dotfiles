@@ -1,11 +1,8 @@
 # Brewfile — allends/dotfiles
 # Run: brew bundle install
-# Taps
-tap "yakitrak/yakitrak"
 
 # Shells
 brew "zsh"
-brew "fish"
 
 # Shell enhancements
 brew "starship"       # Cross-shell prompt
@@ -29,11 +26,10 @@ brew "zellij"         # Terminal multiplexer
 brew "helix"          # Modal editor
 
 # Notes
-brew "notesmd-cli"    # Obsidian vault CLI
 brew "zk"             # Zettelkasten LSP (used with helix)
 
 # macOS only (ignored on Linux)
 cask "zed"
-cask "obsidian"
 cask "1password"
 cask "orbstack"
+cask "keepingyouawake" # Menu-bar sleep toggle
