@@ -32,7 +32,7 @@ cd ~/dotfiles
 
 ### macOS
 
-`setup.sh` works out of the box. Homebrew installs to `/opt/homebrew`, `setup.sh` keeps or selects Zsh as the login shell, and Brewfile casks (zed, 1password, orbstack, keepingyouawake) install normally. Obsidian and its notesmd-cli tooling are excluded. Install Apple’s Command Line Tools first (`xcode-select --install`) if Git is not yet available.
+`setup.sh` works out of the box. Homebrew installs to `/opt/homebrew`, `setup.sh` keeps or selects Zsh as the login shell, and Brewfile casks (zed, 1password, orbstack, keepingyouawake, tailscale-app, raycast) install normally. Obsidian and its notesmd-cli tooling are excluded. Install Apple’s Command Line Tools first (`xcode-select --install`) if Git is not yet available.
 
 ### Linux (Fedora / RHEL-based)
 
@@ -51,7 +51,7 @@ Homebrew installs to `/home/linuxbrew/.linuxbrew`. A few things to handle before
   [ -d ~/.config/helix ] && mv ~/.config/helix ~/dotfiles-backup/helix
   [ -f ~/.claude/settings.json ] && mv ~/.claude/settings.json ~/dotfiles-backup/claude-settings.json
   ```
-- **Brewfile casks**: The macOS-only casks (zed, 1password, orbstack, keepingyouawake) are silently skipped on Linux.
+- **Brewfile casks**: The macOS-only casks (zed, 1password, orbstack, keepingyouawake, tailscale-app, raycast) are silently skipped on Linux.
 - **Zsh shell**: Setup keeps an existing Zsh login shell. If another shell is configured, `chsh` selects Zsh and may prompt for your password. On Linux, adding a new Zsh path to `/etc/shells` requires sudo. Fish is not installed, linked, or launched.
 - **Outdated Homebrew**: If Homebrew was previously installed but is old, run `brew update` before `setup.sh` to avoid compatibility issues with `brew bundle`.
 - **SSH keys**: The `ssh/` stow package only links `~/.ssh/config`. Existing keys in `~/.ssh/` are not touched and must be copied or generated manually.

@@ -33,3 +33,5 @@ cask "zed"
 cask "1password"
 cask "orbstack"
 cask "keepingyouawake" # Menu-bar sleep toggle
+cask "tailscale-app" # Tailscale macOS app
+cask "raycast"       # App launcher
