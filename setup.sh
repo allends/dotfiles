@@ -18,6 +18,16 @@ fi
 cd "$DOTFILES"
 
 # ---------- 2. Install Homebrew ----------
+# A fresh terminal may not have loaded Homebrew's shell environment yet.
+if ! command -v brew &>/dev/null; then
+    if [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
+        eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
+    fi
+fi
 if ! command -v brew &>/dev/null; then
     echo "==> Installing Homebrew..."
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -34,47 +44,34 @@ echo "==> Brew found at $(which brew)"
 
 # ---------- 3. Install packages from Brewfile ----------
 echo "==> Installing Brewfile packages..."
-brew bundle install --file="$DOTFILES/Brewfile" || true
+brew bundle install --file="$DOTFILES/Brewfile"
 
 # ---------- 4. Stow dotfiles ----------
 echo "==> Linking dotfiles with stow..."
 cd "$DOTFILES"
-for dir in fish git helix ssh claude zed pi; do
+for dir in zsh git helix ssh claude zed pi zellij; do
     if [ -d "$dir" ]; then
         echo "    stow $dir"
-        stow -v --restow --target="$HOME" "$dir" 2>&1 || true
+        stow -v --restow --target="$HOME" "$dir"
     fi
 done
 
-# ---------- 5. Set fish as default shell ----------
-FISH_PATH="$(which fish 2>/dev/null || true)"
-if [ -n "$FISH_PATH" ]; then
-    # Add fish to /etc/shells if not already there (requires sudo)
-    if ! grep -qF "$FISH_PATH" /etc/shells 2>/dev/null; then
-        echo "==> Adding fish to /etc/shells (needs sudo)..."
-        echo "$FISH_PATH" | sudo tee -a /etc/shells >/dev/null 2>&1 || true
-    fi
-
-    # Change default shell if possible
-    if command -v chsh &>/dev/null; then
-        echo "==> Setting fish as default shell..."
-        sudo chsh -s "$FISH_PATH" "$(whoami)" 2>/dev/null || true
-    fi
-
-    # Fallback: add fish exec to .bashrc if chsh failed
-    if [ "$(getent passwd "$(whoami)" | cut -d: -f7)" != "$FISH_PATH" ]; then
-        if ! grep -q "exec fish" "$HOME/.bashrc" 2>/dev/null; then
-            echo "==> Adding fish auto-launch to .bashrc (no sudo for chsh)..."
-            cat >> "$HOME/.bashrc" <<'BASH'
-
-# Launch fish for interactive sessions
-if [ -t 1 ] && [ -z "$FISH_LAUNCHED" ] && command -v fish >/dev/null 2>&1; then
-    export FISH_LAUNCHED=1
-    exec fish
+# ---------- 5. Use Zsh as the default shell ----------
+# macOS ships /bin/zsh and already lists it in /etc/shells.
+if [ "$(uname -s)" = Darwin ]; then
+    ZSH_PATH=/bin/zsh
+    LOGIN_SHELL="$(dscl . -read "/Users/$(id -un)" UserShell | awk '{print $2}')"
+else
+    ZSH_PATH="$(command -v zsh)"
+    LOGIN_SHELL="$(getent passwd "$(id -un)" | cut -d: -f7)"
 fi
-BASH
-        fi
+
+if [ "${LOGIN_SHELL##*/}" != zsh ]; then
+    if ! grep -qxF "$ZSH_PATH" /etc/shells; then
+        printf '%s\n' "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
     fi
+    echo "==> Setting Zsh as default shell..."
+    chsh -s "$ZSH_PATH"
 fi
 
 # ---------- 6. Setup gh auth (interactive) ----------
@@ -83,4 +80,4 @@ if command -v gh &>/dev/null && ! gh auth status &>/dev/null 2>&1; then
 fi
 
 echo ""
-echo "==> Done! Open a new terminal or run 'fish' to get started."
+echo "==> Done! Open a new terminal or run 'zsh' to get started."

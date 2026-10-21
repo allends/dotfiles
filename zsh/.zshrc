@@ -67,7 +67,7 @@ alias aws-qa="aws sso login --profile=QA"
 alias aws-prod="aws sso login --profile=PRODUCTION"
 alias migrate-qa="AWS_PROFILE=PRODUCTION DOPPLER_ENV=prd bun run db:migrate"
 alias migrate-prod="AWS_PROFILE=PRODUCTION DOPPLER_ENV=prd bun run db:migrate"
-. "/Users/allen/.deno/env"
+[[ -r "$HOME/.deno/env" ]] && . "$HOME/.deno/env"
 # Initialize zsh completions (added by deno install script)
 autoload -Uz compinit
 compinit
